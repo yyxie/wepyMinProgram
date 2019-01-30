@@ -1,0 +1,15 @@
+{
+	"description": "小程序学习总结",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx0b981c7b91dc4859",
+	"projectname": "wepylearn",
+	"miniprogramRoot": "dist/",
+	"condition": {}
+}

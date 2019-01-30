@@ -1,0 +1,75 @@
+<style lang="less">
+  .image-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .image-list-item {
+    margin: 10px;
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="image-wrapper">
+      <view class="image-list-item" wx:for="{{imgList}}" wx:item="item" wx:key="id" @tap="previewImg({{item.index}})">
+        <image src="{{item.picUrl}}" style="width: 100px; height:100px;"></image>
+      </view>
+    </view>
+    <ImgPreview :show.sync="isPreview" :imgList.sync="imgList" @close.user="closeImgPreview" @del.user="delImg"
+                hasDel="{{true}}" :currentImg.sync="currentImg" />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import ImgPreview from '../components/ImgPreview';
+
+  export default class Home extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    }
+    components = {
+      ImgPreview
+    }
+
+    mixins = []
+
+    data = {
+      isPreview: false,
+      imgList: [{
+        id: 1,
+        picUrl: '../images/list-empty.png'
+      }, {
+        id: 2,
+        picUrl: '../images/list-empty-collect.png'
+      }, {
+        id: 3,
+        picUrl: '../images/list-empty-house.png'
+      }, {
+        id: 4,
+        picUrl: '../images/list-empty-yuyue.png'
+      }],
+      currentImg: 0
+    }
+
+    computed = {}
+
+    methods = {}
+
+    delImg() {
+
+    }
+
+    closeImgPreview() {
+
+    }
+
+    previewImg(index) {
+      this.currentImg = index;
+      this.isPreview = true;
+    }
+
+    onLoad() {
+    }
+  }
+</script>
