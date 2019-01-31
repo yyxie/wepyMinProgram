@@ -11,9 +11,16 @@
 <template>
   <view class="container">
     <view class="image-wrapper">
-      <view class="image-list-item" wx:for="{{imgList}}" wx:item="item" wx:key="id" @tap="previewImg({{item.index}})">
-        <image src="{{item.picUrl}}" style="width: 100px; height:100px;"></image>
+      <view class="image-list-item"
+            wx:for="{{imgList}}"
+            wx:item="item"
+            wx:key="id"
+      >
+        <image src="{{item.picUrl}}"
+               style="width: 100px; height:100px;"
+               @tap="previewImg({{index}})"></image>
       </view>
+      <UploadImg :imgList.sync="imgList" style="width: 100px; height:100px;" />
     </view>
     <ImgPreview :show.sync="isPreview" :imgList.sync="imgList" @close.user="closeImgPreview" @del.user="delImg"
                 hasDel="{{true}}" :currentImg.sync="currentImg" />
@@ -21,20 +28,23 @@
 </template>
 
 <script>
-  import wepy from 'wepy';
-  import ImgPreview from '../components/ImgPreview';
+  import wepy from 'wepy'
+  import UploadImg from '../components/uploadImg'
+  import ImgPreview from '../components/ImgPreview'
 
   export default class Home extends wepy.page {
     config = {
       navigationBarTitleText: '首页'
     }
     components = {
-      ImgPreview
+      ImgPreview,
+      UploadImg
     }
 
     mixins = []
 
     data = {
+      uploadImgStyle: 'width: 100px; height:100px;',
       isPreview: false,
       imgList: [{
         id: 1,
@@ -54,19 +64,31 @@
 
     computed = {}
 
-    methods = {}
-
-    delImg() {
-
+    methods = {
+      closeImgPreview() {
+        this.isPreview = false
+      },
+      delImg() {
+        const id = this.imgList[this.currentImg].id
+        this.imgList = this.imgList.filter((item) => {
+          return item.id != id
+        })
+      }
+    }
+    watch = {
+      imgList(newValue, oldValue) {
+        debugger
+      }
     }
 
     closeImgPreview() {
-
+      this.isPreview = false
     }
 
     previewImg(index) {
-      this.currentImg = index;
-      this.isPreview = true;
+      debugger
+      this.currentImg = index
+      this.isPreview = true
     }
 
     onLoad() {

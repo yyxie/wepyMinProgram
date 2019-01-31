@@ -1,0 +1,177 @@
+<style lang="less">
+  .sign-attachment-btn {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+
+  .sign-attachment-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .btn-upload-img {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    /*  width: 200px;
+      height: 150px;*/
+    border: 1px solid #eee;
+    background: #E5E5E5;
+    border-radius: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    view {
+      font-size: 70px;
+      color: #fff;
+
+    }
+  }
+</style>
+<template>
+  <view class="sign-attachment-btn" style="{{style}}">
+    <view class="btn-upload-img" type="primary" @tap="chooseImg">
+      <view class="iconfont icon-camera"></view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class UploadImg extends wepy.component {
+    data = {}
+    props = {
+      imgList: {
+        twoWay: true,
+        default: []
+      },
+      style: {
+        type: String
+      }
+    }
+    events = {}
+    methods = {
+      chooseImg() {
+        const that = this
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['original'],
+          sourceType: ['album', 'camera'],
+          success(res) {
+            // tempFilePath可以作为img标签的src属性显示图片
+            const tempFilePath = res.tempFilePaths[0]
+            const tempFilesSize = res.tempFiles[0].size  // 获取图片的大小，单位B
+            if (that.imgList.length >= 5) { // 最多上传五张
+              console.log('最多上传五张签约附件！')
+            } else {
+              if (tempFilesSize <= 3 * 1024 * 1024) { // 图片最大3M
+                debugger
+                that.imgList = that.imgList.concat([{
+                  id: that.imgList.length,
+                  picUrl: tempFilePath
+                }])
+                /*  wx.uploadFile({
+                    url: Api.apiMall + '/free/landlord/sign/upload',
+                    filePath: tempFilePath,
+                    name: 'attache',
+                    formData: {
+                      sessionId: that.$parent.getUserData().sessionId, //, '134471193959678581',
+                      type: 0, // 操作类型 0：上传 文件不能为空 1：删除 pictureId不能为空
+                      packageId: that.packageId // 图片pictureId
+                    },
+                    success: function(res) {
+                      const data = JSON.parse(res.data);
+                      if (data.errorCode === 0) {
+                        that.packageId = data.data.packageId;
+                        that.imgList.push(
+                          {
+                            id: data.data.id,
+                            picUrl: data.data.showUrl
+                          }
+                        );
+                        that.$apply();
+                        Toast.success('上传附件成功');
+                      } else {
+                        Toast('上传附件失败！');
+                      }
+                    },
+                    fail: function(res) {
+                      Toast('上传附件失败！');
+                    }
+                  });*/
+              } else {
+                console.log('上传附件不能大于3M！')
+              }
+            }
+          },
+          fail: function () {
+          }
+        })
+      }
+    }
+
+    onLoad() {
+    }
+  }
+
+</script>
+<style lang="less">
+  .img-preview {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    z-index: 10000;
+    oveflow: hidden;
+    .img-preview-swiper {
+      width: 100%;
+      z-index: 100001;
+      max-height: 70%;
+      height: 100%;
+      .slide-image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .icon-del-img-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: calc(50% - 40px);
+    width: 80px;
+    height: 80px;
+    z-index: 100001;
+    text-align: center;
+
+    .del-img-icon {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      color: #dedede;
+    }
+  }
+
+  .alert_mask {
+    background-color: rgba(0, 0, 0, 1);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+</style>
