@@ -10,3 +10,4 @@
 通过$emit实现组件调用父页面的方法, $emit与$broadcast正好相反，事件发起组件的所有祖先组件会依次接收到$emit事件。如果组件ComE发起一个$emit事件，那么接收到事件的先后顺序为：组件ComA、页面Page_Index
 cccc
 ddddd
+cccvvvv
